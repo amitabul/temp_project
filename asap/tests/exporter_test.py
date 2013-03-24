@@ -13,11 +13,11 @@ class ExporterTest(unittest.TestCase):
     def setUp(self):
         self.conn = None
         self.srcTableName = "test_collection"
-        self.incSql = None
+        self.conSql = None
         
         
-        sqlFile = open(TestConf.incSqlFile, "r")
-        self.incSql = sqlFile.read()
+        sqlFile = open(TestConf.conSqlFile, "r")
+        self.conSql = sqlFile.read()
         sqlFile.close()
 
         self.conn = sqlite3.connect("test.db", check_same_thread = False)
@@ -43,7 +43,7 @@ class ExporterTest(unittest.TestCase):
 
     def testFetchmany(self):
         exporter = Exporter(TestConf)
-        exporter.execute(self.incSql)
+        exporter.execute(self.conSql)
         
         result = []
         
@@ -58,6 +58,9 @@ class ExporterTest(unittest.TestCase):
                  str(result))
         
         exporter.close()
+    
+    def testReadIncSql(self):
+        pass
 
 
 if __name__ == "__main__":

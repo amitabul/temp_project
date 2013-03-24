@@ -34,10 +34,10 @@ class Pusher(object):
     def close(self):
         self.conn.close()
     
-    def pushIncData(self, data):
+    def pushConData(self, data):
         conn = self.getConn()
         cursor = conn.cursor()
-        cursor.executemany(self.makeIncStmt(), data)
+        cursor.executemany(self.makeConStmt(), data)
         conn.commit()
         
     def pushDelData(self, data):
@@ -48,14 +48,14 @@ class Pusher(object):
         
     def __getVarStr(self, str):
         varStr = ''
-        for _ in range(0, len(self.conf.dstIncFields.split(','))):
+        for _ in range(0, len(self.conf.dstConFields.split(','))):
             varStr = varStr + ",%s"
         return varStr.lstrip(',')
     
-    def makeIncStmt(self):
-        varStr = self.__getVarStr(self.conf.dstIncFields)
-        return "INSERT INTO " + self.conf.dstIncTable + \
-            "(" + self.conf.dstIncFields + ") VALUES (" + varStr + ')'
+    def makeConStmt(self):
+        varStr = self.__getVarStr(self.conf.dstConFields)
+        return "INSERT INTO " + self.conf.dstConTable + \
+            "(" + self.conf.dstConFields + ") VALUES (" + varStr + ')'
             
     def makeDelStmt(self):
         varStr = self.__getVarStr(self.conf.dstDelFields)

@@ -10,19 +10,20 @@ import datetime
 
 from asap.transmitter import Transmitter
 from test_collection import conf as TestConf
+from asap.sql_reader import SqlReader
 
 class TransmitterTest(unittest.TestCase):
 
     def setUp(self):
         self.conn = None
         self.srcTableName = "test_collection"
-        self.incSql = None
+        self.conSql = None
         self.data = None
         self.dstConn = None
         
         
-        incSqlFile = open(TestConf.incSqlFile, "r")
-        self.incSql = incSqlFile.read()
+        incSqlFile = open(TestConf.conSqlFile, "r")
+        self.conSql = incSqlFile.read()
         incSqlFile.close()
 
         self.conn = sqlite3.connect("test.db", check_same_thread = False)
@@ -49,25 +50,25 @@ class TransmitterTest(unittest.TestCase):
                 password = TestConf.dstPassword,
                 database = TestConf.dstDatabase)
         dstCursor = self.dstConn.cursor()
-        dstCursor.execute('TRUNCATE TABLE ' + TestConf.dstIncTable)
+        dstCursor.execute('TRUNCATE TABLE ' + TestConf.dstConTable)
         dstCursor.execute('TRUNCATE TABLE ' + TestConf.dstDelTable)
         self.dstConn.commit()
 
     def tearDown(self):
         self.dstConn.close()
 
-    def testIncTransmit(self):
+    def testConTransmit(self):
         transmitter = Transmitter(TestConf)
-        transmitter.transmitIncData()
+        transmitter.transmitConData(SqlReader.FULL)
         
         dstCursor = self.dstConn.cursor()
-        dstCursor.execute('select * from ' + TestConf.dstIncTable)
+        dstCursor.execute('select * from ' + TestConf.dstConTable)
         rows = dstCursor.fetchall()
         self.assertEqual(len(self.data), len(rows))
         
     def testDelTransmit(self):
         transmitter = Transmitter(TestConf)
-        transmitter.transmitDelData()
+        transmitter.transmitDelData(SqlReader.FULL)
         
         dstCursor = self.dstConn.cursor()
         dstCursor.execute('select * from ' + TestConf.dstDelTable)
@@ -79,9 +80,9 @@ class TransmitterTest(unittest.TestCase):
         now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         
         transmitter = Transmitter(TestConf)
-        transmitter.transmit()
+        transmitter.transmit(SqlReader.FULL)
         
-        file = open(TestConf.serviceHome + "/TIMESTAMP")
+        file = open(TestConf.timestampFile)
         fileTime = file.read()
         self.assertEqual(now, fileTime)
         file.close()

@@ -20,7 +20,7 @@ class PusherTest(unittest.TestCase):
                 password = TestConf.dstPassword,
                 database = TestConf.dstDatabase)
         cursor = self.conn.cursor()
-        cursor.execute('TRUNCATE TABLE ' + TestConf.dstIncTable)
+        cursor.execute('TRUNCATE TABLE ' + TestConf.dstConTable)
         cursor.execute('TRUNCATE TABLE ' + TestConf.dstDelTable)
         
         now = datetime.datetime.now()
@@ -33,12 +33,12 @@ class PusherTest(unittest.TestCase):
     def tearDown(self):
         self.conn.close()
 
-    def testIncPush(self):
+    def testConPush(self):
         pusher = Pusher(TestConf)
-        pusher.pushIncData(self.data)
+        pusher.pushConData(self.data)
         
         cursor = self.conn.cursor()
-        cursor.execute('SELECT * FROM ' + TestConf.dstIncTable)
+        cursor.execute('SELECT * FROM ' + TestConf.dstConTable)
         rows = cursor.fetchall()
         self.assertEqual(3, len(rows))
 
