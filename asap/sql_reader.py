@@ -47,5 +47,5 @@ class SqlReader(object):
         def makeWhere(matchObj):
             return re.sub(r"(\$TIMESTAMP)", timestamp, matchObj.group(1))
         
-        return re.sub("--{(.*)}", makeWhere, oriSql)
+        return re.sub("/\*{{(.*)}}\*/", makeWhere, oriSql)
         

@@ -23,7 +23,7 @@ class SqlReaderTest(unittest.TestCase):
         
         self.assertEqual(
                  "SELECT * FROM test_collection " +
-                     "WHERE datetime > 2013-03-24 10:56:00", sql)
+                     "WHERE datetime > 2013-03-24 10:56:00\n", sql)
         
 
 

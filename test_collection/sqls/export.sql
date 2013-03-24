@@ -1,1 +1,1 @@
-SELECT * FROM test_collection --{WHERE datetime > $TIMESTAMP}
+SELECT * FROM test_collection /*{{WHERE datetime > $TIMESTAMP}}*/
