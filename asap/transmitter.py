@@ -3,7 +3,8 @@ Created on Mar 24, 2013
 
 @author: amitabul
 '''
-
+import imp
+import sys
 import datetime
 from asap.exporter import Exporter
 from asap.pusher import Pusher
@@ -16,13 +17,13 @@ class Transmitter():
         self.delSql = None
         
     def readSql(self, filePath):
-        sql = None
         file = open(filePath, "r")
         sql = file.read()
         file.close()
         return sql
     
     def getIncSql(self):
+        print(self.conf.incSqlFile)
         if self.incSql == None :
             self.incSql = self.readSql(self.conf.incSqlFile)
         return self.incSql
@@ -81,3 +82,13 @@ class Transmitter():
         
         timestampFile = open(self.conf.serviceHome + "/TIMESTAMP" , "w")
         timestampFile.write(now)
+        timestampFile.close()
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        exit(1)
+        
+    serviceName = sys.argv[1]
+    conf = imp.load_source("conf", serviceName + "/conf.py")
+    transmitter = Transmitter(conf)
+    transmitter.transmit()

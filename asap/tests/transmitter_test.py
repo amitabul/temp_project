@@ -84,6 +84,7 @@ class TransmitterTest(unittest.TestCase):
         file = open(TestConf.serviceHome + "/TIMESTAMP")
         fileTime = file.read()
         self.assertEqual(now, fileTime)
+        file.close()
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testTransmit']
