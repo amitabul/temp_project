@@ -10,9 +10,9 @@ fi
 
 SERVICE_NAME=$1
 
-pushd $PYTHONPATH &> /dev/null
+pushd $HOME_DIR &> /dev/null
 
-export PYTHONPATH=$HOME_DIR
+PYTHONPATH=$HOME_DIR
 python3 ./asap/transmitter.py $SERVICE_NAME
 
 popd &> /dev/null

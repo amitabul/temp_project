@@ -20,10 +20,11 @@ class Transmitter():
         file = open(filePath, "r")
         sql = file.read()
         file.close()
+
+        # TODO: TIMESTAMP 보고 sql 수정해서 return 해주자.
         return sql
     
     def getIncSql(self):
-        print(self.conf.incSqlFile)
         if self.incSql == None :
             self.incSql = self.readSql(self.conf.incSqlFile)
         return self.incSql
@@ -32,20 +33,6 @@ class Transmitter():
         if self.delSql == None :
             self.delSql = self.readSql(self.conf.delSqlFile)
         return self.delSql
-    
-    def transmitData(self, sql):
-        exporter = Exporter(self.conf)
-        pusher = Pusher(self.conf)
-        
-        exporter.execute(sql)
-        
-        subResult = exporter.fetchmany()
-        while subResult:
-            pusher.pushIncData(subResult)
-            subResult = exporter.fetchmany()
-            
-        exporter.close()
-        pusher.close()
     
     def transmitIncData(self):
         exporter = Exporter(self.conf)

@@ -16,7 +16,7 @@ class ExporterTest(unittest.TestCase):
         self.incSql = None
         
         
-        sqlFile = open("../../test_collection/export.incSql", "r")
+        sqlFile = open(TestConf.incSqlFile, "r")
         self.incSql = sqlFile.read()
         sqlFile.close()
 
